@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Koltuk Seçimi - CineMax</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #96a726;
+            --secondary-color: #1A237E;
+            --accent-color: #FFD740;
+            --reserved-color: #ff4444;
+            --background-color: #0a0a0a;
+            --seat-size: 40px;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: var(--background-color);
+            color: #fff;
+            padding: 20px;
+            margin: 0;
+        }
+
+        h1 {
+            text-align: center;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+
+        h5 {
+            text-align: center;
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 2rem;
+        }
+
+        .seat-container {
+            display: grid;
+            grid-template-columns: repeat(10, var(--seat-size));
+            gap: 10px;
+            justify-content: center;
+            margin: 0 auto;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            max-width: fit-content;
+        }
+
+        .seat {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: var(--primary-color);
+            color: #fff;
+            width: var(--seat-size);
+            height: var(--seat-size);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 14px;
+        }
+
+        .seat.reserved {
+            background-color: var(--reserved-color);
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+
+        .seat.selected {
+            background-color: var(--accent-color);
+            color: #000;
+        }
+
+        .seat input {
+            display: none;
+        }
+
+        .seat label {
+            cursor: pointer;
+        }
+
+        button {
+            display: block;
+            margin: 20px auto;
+            padding: 10px 20px;
+            background-color: var(--primary-color);
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #7f911f;
+        }
+
+        .screen {
+            text-align: center;
+            margin-bottom: 2rem;
+            font-size: 1.5rem;
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+
+        .legend {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 2rem;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .legend-box {
+            width: 20px;
+            height: 20px;
+            border-radius: 4px;
+        }
+
+        .legend-box.available {
+            background-color: var(--primary-color);
+        }
+
+        .legend-box.reserved {
+            background-color: var(--reserved-color);
+        }
+
+        .legend-box.selected {
+            background-color: var(--accent-color);
+        }
+
+        .footer {
+            background: #000;
+            color: rgba(255, 255, 255, 0.8);
+            padding: 1rem 0;
+            margin-top: 8rem;
+            text-align: center;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .footer-bottom {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .footer-bottom a {
+            color: var(--primary-color);
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .footer-bottom a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>
+        <%= filmName %>
+    </h1>
+    <h5>Seans Saati: <%= sessionInfo %>
+    </h5>
+
+    <div class="screen">PERDE</div>
+
+    <div class="legend">
+        <div class="legend-item">
+            <div class="legend-box available"></div>
+            <span>Müsait</span>
+        </div>
+        <div class="legend-item">
+            <div class="legend-box reserved"></div>
+            <span>Dolu</span>
+        </div>
+        <div class="legend-item">
+            <div class="legend-box selected"></div>
+            <span>Seçili</span>
+        </div>
+    </div>
+
+    <form method="POST" action="/rezervasyon-tamamla">
+        <input type="hidden" id="sessionInfo" name="sessionInfo" value="<%= sessionInfo %>">
+        <input type="hidden" id="sessionid" name="sessionid" value="<%= sessionid %>">
+        <input type="hidden" id="filmName" name="filmName" value="<%= filmName %>">
+        <div class="seat-container">
+            <% seats.forEach(function(seat) { %>
+                <div class="seat <%= seat.is_reserved ? 'reserved' : '' %>" data-seat-id="<%= seat.id %>">
+                    <% if (!seat.is_reserved) { %>
+                        <input type="checkbox" name="seats" value="<%= seat.id %>" id="seat-<%= seat.id %>">
+                        <label for="seat-<%= seat.id %>">
+                            <%= seat.seat_number %>
+                        </label>
+                        <% } else { %>
+                            <span>
+                                <%= seat.seat_number %>
+                            </span>
+                            <% } %>
+                </div>
+                <% }) %>
+        </div>
+        <button type="submit">Rezervasyonu Tamamla</button>
+        <button><a href="/" style="text-decoration: none; color: #000;">Ana Sayfa</a></button>
+    </form>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-bottom">
+                <p>&copy; 2023 CineMax. Tüm hakları saklıdır. | <a href="https://www.batuhancolk.com/">Batuhan Çolak</a>
+                </p>
+            </div>
+        </div>
+    </footer>
+
+
+
+
+    <script>
+        // Koltuk seçme ve seçimi geri alma işlevi
+        const seats = document.querySelectorAll('.seat:not(.reserved)');
+        seats.forEach(seat => {
+            seat.addEventListener('click', () => {
+                const checkbox = seat.querySelector('input[type="checkbox"]');
+                if (checkbox) {
+                    checkbox.checked = !checkbox.checked;
+                    seat.classList.toggle('selected', checkbox.checked);
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>
+<!-- <!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Koltuk Seçimi</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        .seat-container {
+            display: grid;
+            grid-template-columns: repeat(10, 1fr);
+            /* 10 koltuk genişliğinde bir grid */
+            gap: 10px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .seat {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: green;
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            text-align: center;
+        }
+
+        .seat.reserved {
+            background-color: red;
+            cursor: not-allowed;
+        }
+
+        .seat input {
+            display: none;
+        }
+
+        .seat label {
+            cursor: pointer;
+        }
+
+        .seat input:checked+label {
+            background-color: rgb(181, 192, 26);
+        }
+
+        button {
+            display: block;
+            margin: 20px auto;
+            padding: 10px 20px;
+            background-color: #333;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #555;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>
+        <%= filmName %>
+    </h1>
+    <h5>Seans Saati: <%= sessionInfo %>
+    </h5>
+
+    <h1>Koltuk Seçimi</h1>
+    <form method="POST" action="/rezervasyon-tamamla">
+        <input type="hidden" id="sessionInfo" name="sessionInfo" value="<%= sessionInfo %>">
+        <input type="hidden" id="sessionid" name="sessionid" value="<%= sessionid %>">
+        <input type="hidden" id="filmName" name="filmName" value="<%= filmName %>">
+        <div class="seat-container">
+            <% seats.forEach(function(seat) { %>
+                <div class="seat <%= seat.is_reserved ? 'reserved' : '' %>">
+                    <% if (!seat.is_reserved) { %>
+                        <input type="checkbox" name="seats" value="<%= seat.id %>" id="seat-<%= seat.id %>">
+                        <label for="seat-<%= seat.id %>">Koltuk <%= seat.seat_number %></label>
+                        <% } else { %>
+                            <span>Koltuk <%= seat.seat_number %></span>
+                            <% } %>
+                </div>
+                <% }) %>
+        </div>
+        <button type="submit">Rezervasyonu Tamamla</button>
+    </form>
+</body>
+
+</html> -->

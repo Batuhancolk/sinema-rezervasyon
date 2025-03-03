@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CineMax - Premium Sinema Deneyimi</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #96a726;
+            --secondary-color: #1A237E;
+            --accent-color: #FFD740;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background: #0a0a0a;
+            color: #fff;
+        }
+
+        .navbar {
+            background: rgba(0, 0, 0, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 2px solid var(--primary-color);
+            padding: 1rem 0;
+        }
+
+        .navbar-brand {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-color) !important;
+        }
+
+        .nav-link {
+            color: rgba(255, 255, 255, 0.8) !important;
+            font-weight: 500;
+            margin: 0 0.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .nav-link:hover {
+            color: var(--primary-color) !important;
+        }
+
+        .film-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            padding: 2rem;
+        }
+
+        .film-card {
+            position: relative;
+            overflow: hidden;
+            border-radius: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .film-card img {
+            width: 100%;
+            height: auto;
+            display: block;
+            border-radius: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .film-card:hover img {
+            transform: scale(1.05);
+            filter: brightness(0.5);
+        }
+
+        .film-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: all 0.3s ease;
+            background: rgba(0, 0, 0, 0.7);
+            border-radius: 15px;
+        }
+
+        .film-card:hover .film-overlay {
+            opacity: 1;
+        }
+
+        .film-overlay button {
+            background: var(--primary-color);
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            color: #fff;
+            font-weight: 600;
+            margin: 0.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .film-overlay button:hover {
+            background: #7f911f;
+        }
+
+        .film-overlay button.secondary {
+            background: transparent;
+            border: 2px solid var(--primary-color);
+        }
+
+        .film-overlay button.secondary:hover {
+            background: var(--primary-color);
+            color: #fff;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-top: 2rem;
+            color: #fff;
+        }
+
+        .footer {
+            background: #000;
+            color: rgba(255, 255, 255, 0.8);
+            padding: 1rem 0;
+            margin-top: 8rem;
+            text-align: center;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .footer-bottom {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .footer-bottom a {
+            color: var(--primary-color);
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .footer-bottom a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="/">CineMax</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <% if (admin) { %>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/adminControlPage">Admin Panel</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/logout">Çıkış Yap</a>
+                        </li>
+                        <% } else if (user) { %>
+                            <li class="nav-item">
+                                <a class="nav-link" href="/logout">Çıkış Yap</a>
+                            </li>
+                            <% } else { %>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="/register">Kayıt Ol</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="/login">Giriş Yap</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="/admin-login">Admin Giriş</a>
+                                </li>
+                                <% } %>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="container py-5">
+        <h1 class="section-title">Vizyondaki Filmler</h1>
+
+        <div class="film-container">
+            <% films.forEach(film=> { %>
+                <div class="film-card">
+                    <img src="<%= film.poster_url %>" alt="<%= film.title %>">
+                    <div class="film-overlay">
+                        <p class="navbar-brand">CineMax</p>
+                        <a href="/seanslar/<%= film.id %>">
+                            <button class="secondary">Hemen Bilet Al</button>
+                        </a>
+                        <a href="/film-details/<%= film.id %>">
+                            <button class="secondary">İncele</button>
+                        </a>
+                    </div>
+                </div>
+                <% }) %>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-bottom">
+                <p>&copy; 2023 CineMax. Tüm hakları saklıdır. | <a href="https://www.batuhancolk.com/">Batuhan Çolak</a>
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>
+<!-- <!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sinema Rezervasyon Sistemi</title>
+</head>
+
+<body>
+    <% if (admin) { %>
+        <a href="/adminControlPage">Admin Kontrol</a>
+        <a href="/logout">Çıkış Yap</a>
+        <% } %>
+            <% if (user) { %>
+                <a href="/logout">Çıkış Yap</a>
+                <% } %>
+                    <a href="/register">Kayıt Ol</a>
+                    <a href="/login">Giriş Yap</a>
+                    <a href="/admin-login">Admin Giriş</a>
+                    <br>
+                    <% films.forEach(film=> { %>
+
+                        <img style="width: 200px;" src="<%= film.poster_url %>" alt="">
+                        <h3>
+                            <%= film.title %>
+                        </h3>
+                        <p>
+                            <%= film.description %>
+                        </p>
+                        <a href="/seanslar/<%= film.id %>">Seansları Göster</a>
+                        <% }) %>
+                            <br><br><br>
+
+
+
+</body>
+
+</html> -->

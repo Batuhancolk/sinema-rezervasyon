@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Film Listesi | CineMax Admin</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #96a726;
+            --secondary-color: #2c3e50;
+            --background-dark: #1a1a1a;
+            --text-light: #e0e0e0;
+            --danger-color: #e63946;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background: var(--background-dark);
+            color: var(--text-light);
+            margin: 0;
+            padding: 0;
+        }
+
+        .navbar {
+            background: rgba(26, 26, 26, 0.95);
+            border-bottom: 2px solid var(--primary-color);
+            padding: 1rem 0;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+        }
+
+        .navbar-brand {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-color) !important;
+        }
+
+        .nav-link {
+            color: var(--text-light) !important;
+            font-weight: 500;
+            margin: 0 0.75rem;
+            transition: color 0.3s ease;
+        }
+
+        .nav-link:hover {
+            color: var(--primary-color) !important;
+        }
+
+        .admin-content {
+            max-width: 1200px;
+            margin: 4rem auto;
+            padding: 2rem;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .admin-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .admin-header h1 {
+            font-size: 2rem;
+            color: var(--primary-color);
+            font-weight: 600;
+            margin: 0;
+        }
+
+        .admin-actions {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .admin-btn {
+            padding: 0.6rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+
+        .btn-home {
+            background: var(--primary-color);
+            color: #fff;
+        }
+
+        .btn-home:hover {
+            background: #7f911f;
+            color: #fff;
+        }
+
+        .btn-add {
+            background: var(--secondary-color);
+            color: var(--text-light);
+        }
+
+        .btn-add:hover {
+            background: #3b5670;
+            color: #fff;
+        }
+
+        .alert {
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 0.9rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: none;
+        }
+
+        .alert-success {
+            color: var(--primary-color);
+        }
+
+        .alert-danger {
+            color: var(--danger-color);
+        }
+
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+            background: transparent;
+            color: var(--text-light);
+        }
+
+        .table thead th {
+            background: var(--secondary-color);
+            color: var(--text-light);
+            font-weight: 600;
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 2px solid var(--primary-color);
+        }
+
+        .table tbody tr {
+            transition: background 0.3s ease;
+        }
+
+        .table tbody tr:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .table td {
+            padding: 1rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            vertical-align: middle;
+        }
+
+        .table img {
+            max-width: 80px;
+            height: auto;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .action-btn {
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            display: inline-block;
+            margin: 0.25rem 0;
+        }
+
+        .btn-delete {
+            background: var(--danger-color);
+            color: #fff;
+        }
+
+        .btn-delete:hover {
+            background: #b32d38;
+            color: #fff;
+        }
+
+        .btn-session {
+            background: var(--primary-color);
+            color: #fff;
+        }
+
+        .btn-session:hover {
+            background: #7f911f;
+            color: #fff;
+        }
+
+        .footer {
+            background: var(--background-dark);
+            color: rgba(255, 255, 255, 0.7);
+            padding: 1rem 0;
+            text-align: center;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            margin-top: 4rem;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="/">CineMax</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/adminControlPage">Admin Paneli</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/logout">Çıkış Yap</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="container">
+        <div class="admin-content">
+            <div class="admin-header">
+                <h1>Film Listesi</h1>
+                <div class="admin-actions">
+                    <a href="/" class="admin-btn btn-home">Ana Sayfa</a>
+                    <a href="/addFilm" class="admin-btn btn-add">Film Ekle</a>
+                </div>
+            </div>
+
+            <% if (typeof action !=="undefined" ) { %>
+                <div class="alert <%= action === 'delete' ? 'alert-danger' : 'alert-success' %>">
+                    <% if (action==="delete" ) { %>
+                        <i class='bx bx-trash'></i> Silme İşlemi Başarılı!
+                        <% } else if (action==="update" ) { %>
+                            <i class='bx bx-edit'></i> Koltuk Boşaltıldı!
+                            <% } else if (action==="add" ) { %>
+                                <i class='bx bx-check-circle'></i> Yeni Kayıt Başarılı!
+                                <% } %>
+                </div>
+                <% } %>
+
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th style="width: 50px;">ID</th>
+                                <th style="width: 100px;">Poster</th>
+                                <th>Film Adı</th>
+                                <th>İçerik</th>
+                                <th style="width: 220px;">İşlemler</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% films.forEach(film=> { %>
+                                <tr>
+                                    <td>
+                                        <%= film.id %>
+                                    </td>
+                                    <td>
+                                        <img src="<%= film.poster_url %>" alt="<%= film.title %>">
+                                    </td>
+                                    <td>
+                                        <%= film.title %>
+                                    </td>
+                                    <td>
+                                        <%= film.description %>
+                                    </td>
+                                    <td>
+                                        <a href="/deleteFilm/<%= film.id %>" class="action-btn btn-delete">Filmi
+                                            Kaldır</a>
+                                        <a href="/addSession/<%= film.id %>" class="action-btn btn-session">Seans
+                                            Düzenle</a>
+                                    </td>
+                                </tr>
+                                <% }) %>
+                        </tbody>
+                    </table>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>© 2023 CineMax. Tüm hakları saklıdır.</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>
+<!-- <!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body>
+    <a class="btn btn-sm btn-success" href="/">Ana Sayfa</a>
+    <a class="btn btn-sm btn-primary" href="/addFilm">Film Ekle</a>
+    <div class="mb-4">
+        <% if (action !="undefined" ) { %>
+            <div class="alert alert-<%= action === 'delete' ? 'danger' : 'success' %> d-flex align-items-center">
+                <i class='bx <%= 
+                    action === ' delete' ? 'bx-trash' : action==='update' ? 'bx-edit' : 'bx-check-circle' %>
+                    me-2'></i>
+                <div>
+                    <% if (action==="delete" ) { %>
+                        Silme İşlemi Başarılı!
+                        <% } else if (action==="update" ) { %>
+                            Koltuk Boşaltıldı!
+                            <% } else if (action==="add" ) { %>
+                                Yeni Kayıt Başarılı!
+                                <% } %>
+                </div>
+            </div>
+            <% } %>
+    </div>
+
+    <table class="table table-bordered table-dark">
+        <thead>
+            <tr>
+                <th style="width: 50px;">id</th>
+                <th style="width: 150px;">Poster</th>
+                <th>Film Adı</th>
+                <th>İçerik</th>
+                <th style="width: 130px;">İşlemler</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% films.forEach(film=> { %>
+                <tr>
+                    <td>
+                        <%= film.id %>
+                    </td>
+                    <td>
+                        <img src="<%= film.poster_url %>" class="img-fluid" alt="">
+                    </td>
+                    <td>
+                        <%= film.title %>
+                    </td>
+                    <td>
+                        <%= film.description %>
+                    </td>
+                    <td>
+                        <form method="post">
+
+                            <a class="btn btn-sm btn-danger" href="/deleteFilm/<%= film.id %>">Filmi
+                                Kaldır</a>
+                            <a class="btn btn-sm btn-success" href="/addSession/<%= film.id %>">Seans
+                                Ekle/Kaldır</a>
+                        </form>
+                    </td>
+                </tr>
+                <% }) %>
+
+        </tbody>
+
+    </table>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+
+</html> -->

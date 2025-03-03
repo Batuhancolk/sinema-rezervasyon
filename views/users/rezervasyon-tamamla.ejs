@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rezervasyon Onayı | CineMax</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #96a726;
+            --secondary-color: #1A237E;
+            --accent-color: #FFD740;
+            --background-dark: #0a0a0a;
+            --text-light: rgba(255, 255, 255, 0.9);
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background: var(--background-dark);
+            color: var(--text-light);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .ticket-container {
+            max-width: 400px;
+            width: 100%;
+            background: linear-gradient(145deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            overflow: hidden;
+            position: relative;
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .ticket-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at top left, var(--primary-color), transparent 50%),
+                radial-gradient(circle at bottom right, var(--accent-color), transparent 50%);
+            opacity: 0.2;
+            pointer-events: none;
+        }
+
+        .ticket-header {
+            margin-bottom: 1.5rem;
+        }
+
+        .ticket-header h1 {
+            font-size: 2rem;
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+            font-weight: 700;
+        }
+
+        .ticket-header h3 {
+            font-size: 1.25rem;
+            color: var(--accent-color);
+            font-weight: 600;
+        }
+
+        .ticket-details {
+            text-align: left;
+            margin-bottom: 1.5rem;
+        }
+
+        .ticket-details p {
+            font-size: 1rem;
+            color: var(--text-light);
+            margin-bottom: 0.75rem;
+            font-weight: 500;
+        }
+
+        .ticket-details p strong {
+            color: var(--primary-color);
+        }
+
+        .ticket-footer {
+            margin-top: 1.5rem;
+        }
+
+        .ticket-footer a {
+            background: var(--primary-color);
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            color: #fff;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            display: inline-block;
+        }
+
+        .ticket-footer a:hover {
+            background: #7f911f;
+            color: #fff;
+        }
+
+        .ticket-qr {
+            margin-top: 1.5rem;
+        }
+
+        .ticket-qr img {
+            width: 120px;
+            height: 120px;
+            border-radius: 10px;
+            border: 2px solid var(--primary-color);
+            padding: 0.5rem;
+            background: #fff;
+        }
+
+        .ticket-note {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.7);
+            margin-top: 1rem;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Bilet Tasarımı -->
+    <div class="ticket-container">
+        <div class="ticket-header">
+            <h1>Hoş geldiniz, <%= user %>
+            </h1>
+            <h3>
+                <%= filmName %>
+            </h3>
+        </div>
+        <div class="ticket-details">
+            <p><strong>Seans:</strong>
+                <%= sessionInfo %>
+            </p>
+            <p><strong>Koltuklar:</strong>
+                <%= seats %>
+            </p>
+            <p><strong>E-posta:</strong> <a href="mailto:<%= userEmail %>">
+                    <%= userEmail %>
+                </a></p>
+        </div>
+
+        <div class="ticket-note">
+            <p>Rezervasyon bilgileriniz e-posta adresinize gönderilmiştir.</p>
+        </div>
+        <div class="ticket-footer">
+            <a href="/" class="btn-home">Ana Sayfaya Dön</a>
+        </div>
+    </div>
+</body>
+
+</html>
+</body>
+
+</html>
+<!-- <!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <h1>Hoşgeldiniz Sayın <%= user %>
+    </h1>
+
+
+    <h3>
+        <%= filmName %>
+    </h3>
+    <p>
+        Seans Bilgileriniz: <%= sessionInfo %>
+    </p>
+    <p>
+        Koltuk Bilgileriniz: <%= seats %>
+    </p>
+
+    <p>
+        Rezervasyon bilgileriniz <a href="">
+            <%= userEmail %>
+        </a>adresine iletilmiştir.
+    </p>
+
+</body>
+
+</html> -->
